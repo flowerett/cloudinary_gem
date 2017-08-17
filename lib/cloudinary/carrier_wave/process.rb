@@ -145,6 +145,7 @@ module Cloudinary::CarrierWave
     elsif self.version_name.present?
       # No local format. The reset should be handled by main uploader
       uploader = self.model.send(self.mounted_as)
+      uploader = uploader[0] if uploader.is_a?(Array)
       format = uploader.format
     end
     format
@@ -154,7 +155,7 @@ module Cloudinary::CarrierWave
     format = Cloudinary::PreloadedFile.split_format(original_filename || "").last
     return format || "" if resource_type == "raw"
     format = requested_format || format || default_format
- 
+
     format = format.to_s.downcase
     Cloudinary::FORMAT_ALIASES[format] || format
   end
